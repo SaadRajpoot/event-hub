@@ -1,0 +1,54 @@
+# Environment files - never commit secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Next.js
+frontend/.next/
+frontend/out/
+
+# PHP / Laravel
+vendor/
+bootstrap/cache/*.php
+!bootstrap/cache/.gitkeep
+storage/logs/*.log
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*
+!storage/framework/cache/data/.gitkeep
+!storage/framework/sessions/.gitkeep
+!storage/framework/views/.gitkeep
+
+# Composer
+composer.phar
+
+# Docker volumes / generated
+docker/mysql/data/
+
+# Logs
+*.log
+logs/
+
+# Build artifacts
+*.zip
+*.tar.gz
+
+# PDF (POC doc - keep out of repo)
+POC idea.pdf
