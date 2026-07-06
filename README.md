@@ -8,7 +8,7 @@ A multi-service event ticketing platform — Proof of Concept.
 |---------|-------|------|
 | Main API | Laravel 11 / PHP 8.2+ | 8000 |
 | Payment Service | Laravel 11 / PHP 8.2+ | 8001 |
-| Notification Service | Node.js 20 / Express | 8002 |
+| Notification Service | Laravel 11 / PHP 8.2+ | 8002 |
 | Frontend | Next.js 14 / TypeScript | 3000 |
 
 **Infrastructure:** Docker Compose · MySQL 8.0 · Redis 7 · RabbitMQ 3.12
@@ -19,7 +19,7 @@ A multi-service event ticketing platform — Proof of Concept.
 
 ```bash
 # Clone and start all services
-git clone <repo-url> eventhub
+git clone https://github.com/SaadRajpoot/event-hub.git eventhub
 cd eventhub
 cp main-api/.env.example main-api/.env
 cp payment-service/.env.example payment-service/.env
@@ -72,6 +72,12 @@ eventhub/
 ├── docker-compose.yml
 └── README.md
 ```
+
+---
+
+## Author
+
+[SaadRajpoot](https://github.com/SaadRajpoot)
 
 ---
 
