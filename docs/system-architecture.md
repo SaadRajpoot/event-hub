@@ -297,10 +297,11 @@ erDiagram
         string name
         string email UK
         string password
-        enum role "admin|vendor|attendee"
+        string role
         timestamp email_verified_at
-        timestamps created_at updated_at
-        softdelete deleted_at
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
     }
 
     VENDORS {
@@ -309,7 +310,7 @@ erDiagram
         string business_name
         string business_description
         string contact_phone
-        enum kyc_status "pending|verified|rejected"
+        string kyc_status
         text kyc_rejection_reason
         string bank_account_name
         string bank_account_number
@@ -318,15 +319,17 @@ erDiagram
         string webhook_url
         string webhook_secret
         decimal commission_rate_override "nullable"
-        timestamps created_at updated_at
-        softdelete deleted_at
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
     }
 
     ATTENDEES {
         bigint id PK
         bigint user_id FK
         string phone
-        timestamps created_at updated_at
+        timestamp created_at
+        timestamp updated_at
     }
 
     PLATFORM_SETTINGS {
@@ -334,7 +337,8 @@ erDiagram
         string key UK
         string value
         string description
-        timestamps created_at updated_at
+        timestamp created_at
+        timestamp updated_at
     }
 
     EVENTS {
@@ -348,29 +352,31 @@ erDiagram
         datetime start_datetime "UTC"
         datetime end_datetime "UTC"
         string timezone "IANA"
-        enum status "draft|published|ongoing|completed|cancelled"
+        string status
         string cancellation_reason
-        timestamps created_at updated_at
-        softdelete deleted_at
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
     }
 
     TICKET_TYPES {
         bigint id PK
         bigint event_id FK
         string name
-        enum type "general_admission|vip|early_bird|group_bundle"
+        string type
         decimal price
         int quantity
         int quantity_sold
         int quantity_held
-        datetime available_from "nullable"
-        datetime available_until "nullable"
+        datetime available_from
+        datetime available_until
         int min_purchase
         int max_purchase
-        int group_min_quantity "nullable"
-        decimal group_discount_percent "nullable"
+        int group_min_quantity
+        decimal group_discount_percent
         boolean is_active
-        timestamps created_at updated_at
+        timestamp created_at
+        timestamp updated_at
     }
 
     ORDERS {
@@ -378,17 +384,18 @@ erDiagram
         string order_number UK
         bigint attendee_id FK
         bigint event_id FK
-        enum status "pending_payment|paid|cancelled|expired|refunded|partially_refunded"
+        string status
         decimal subtotal
-        decimal platform_commission_rate "snapshot"
+        decimal platform_commission_rate
         decimal platform_commission_amount
         decimal vendor_amount
-        string payment_id "from payment service"
+        string payment_id
         string payment_gateway
         string idempotency_key UK
         datetime expires_at
         datetime paid_at
-        timestamps created_at updated_at
+        timestamp created_at
+        timestamp updated_at
     }
 
     ORDER_ITEMS {
@@ -396,43 +403,46 @@ erDiagram
         bigint order_id FK
         bigint ticket_type_id FK
         int quantity
-        decimal unit_price "snapshot"
+        decimal unit_price
         decimal discount_percent
         decimal line_total
         string qr_code_token UK
         boolean is_checked_in
         datetime checked_in_at
-        timestamps created_at updated_at
+        timestamp created_at
+        timestamp updated_at
     }
 
     PAYMENTS {
         bigint id PK
         bigint order_id FK
         string external_payment_id UK
-        string gateway "stripe_sim|paypal_sim"
+        string gateway
         decimal amount
         string currency
-        enum status "pending|processing|completed|failed|refunded"
+        string status
         string idempotency_key UK
         json gateway_response
-        timestamps created_at updated_at
+        timestamp created_at
+        timestamp updated_at
     }
 
     REFUNDS {
         bigint id PK
         bigint order_id FK
         bigint payment_id FK
-        bigint requested_by FK "attendee user_id"
-        bigint reviewed_by FK "admin user_id, nullable"
+        bigint requested_by FK
+        bigint reviewed_by FK
         decimal refund_amount
         decimal original_amount
-        string refund_policy_applied "full|partial_50|none|event_cancelled"
-        enum status "pending|approved|rejected|processing|completed|failed"
+        string refund_policy_applied
+        string status
         text reason
         text admin_notes
         string external_refund_id
         datetime reviewed_at
-        timestamps created_at updated_at
+        timestamp created_at
+        timestamp updated_at
     }
 
     PAYOUTS {
@@ -443,24 +453,26 @@ erDiagram
         decimal commission_amount
         decimal net_amount
         string currency
-        enum status "pending|approved|processing|completed|failed"
-        bigint approved_by FK "admin user_id, nullable"
+        string status
+        bigint approved_by FK
         datetime approved_at
         string external_payout_id
         json bank_details_snapshot
-        timestamps created_at updated_at
+        timestamp created_at
+        timestamp updated_at
     }
 
     PAYOUT_BATCHES {
         bigint id PK
         string batch_reference UK
-        enum status "processing|completed|partially_failed|failed"
+        string status
         int total_vendors
         int processed_vendors
         int failed_vendors
         datetime started_at
         datetime completed_at
-        timestamps created_at updated_at
+        timestamp created_at
+        timestamp updated_at
     }
 
     PAYOUT_ORDER_ITEMS {
@@ -468,38 +480,41 @@ erDiagram
         bigint payout_id FK
         bigint order_id FK
         decimal amount
-        timestamps created_at updated_at
+        timestamp created_at
+        timestamp updated_at
     }
 
     NOTIFICATIONS {
         bigint id PK
-        string type "email.order_confirmation|email.reminder|etc"
-        string recipient_type "attendee|vendor"
+        string type
+        string recipient_type
         bigint recipient_id
         string recipient_email
         json payload
-        enum status "pending|sent|failed|dead_lettered"
+        string status
         int retry_count
         datetime next_retry_at
         datetime sent_at
         text failure_reason
         string idempotency_key UK
-        timestamps created_at updated_at
+        timestamp created_at
+        timestamp updated_at
     }
 
     VENDOR_WEBHOOK_DELIVERIES {
         bigint id PK
         bigint vendor_id FK
-        string event_type "new_order|sold_out|payout_sent"
+        string event_type
         json payload
         string webhook_url
         int http_status_code
-        enum status "pending|delivered|failed|dead_lettered"
+        string status
         int retry_count
         datetime next_retry_at
         datetime delivered_at
         text failure_reason
-        timestamps created_at updated_at
+        timestamp created_at
+        timestamp updated_at
     }
 
     WAITLISTS {
@@ -508,22 +523,24 @@ erDiagram
         bigint ticket_type_id FK
         bigint attendee_id FK
         int position
-        enum status "waiting|notified|purchased|expired"
+        string status
         datetime notified_at
         datetime expires_at
-        timestamps created_at updated_at
+        timestamp created_at
+        timestamp updated_at
     }
 
     AUDIT_LOGS {
         bigint id PK
-        bigint user_id FK "nullable"
+        bigint user_id FK
         string action
         string entity_type
         bigint entity_id
         json old_values
         json new_values
         string ip_address
-        timestamps created_at updated_at
+        timestamp created_at
+        timestamp updated_at
     }
 
     USERS ||--o| VENDORS : "has"
